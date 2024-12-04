@@ -2,68 +2,29 @@
 
 using namespace std;
 
-bool checkConstraintsDec(int num)
-{
-    return clamp(num, 1, 3) != num;
-}
-bool checkConstraintsAsc(int num)
-{
-    return checkConstraintsDec(-num);
-}
-
-template<ranges::range R>
-bool isSafe(R data, function<bool(int)> predicate){
-    auto count = ranges::count_if(data, predicate);
-        
-    switch (count){
-        case 0:
-            return true;
-        case 1:
-            if(predicate(data.front()) || predicate(data.back()))
-                return true;
-        case 2:
-            for (auto [f, l] : data | views::pairwise)
-                if ((count == predicate(f) + predicate(l)) && !predicate(f + l))
-                    return true;
-        default:
-            return false;
-    }
-
-    // if (count == 0)
-    //     return true;
-    // if (count > 2)
-    //     return false;
-    // if(count == 1 && (predicate(data.front()) || predicate(data.back())))
-    //     return true;
-    
-    // for (auto [f, l] : data | views::pairwise)
-    //     if ((count == predicate(f) + predicate(l)) && !predicate(f + l))
-    //         return true;
-}
-
 int main()
 {
     int res{};
-    int temp;
     string line;
+    regex mulPattern(R"((?:mul\((\d{1,3}),(\d{1,3})\))|(?:do\(\))|(?:don't\(\)))");
+    bool isActive {true};
 
-    while (getline(cin, line))
+    while(cin >> line)
     {
-        istringstream iss(line);
-        vector<int> report;
-        while (iss)
+        vector<smatch> matches(sregex_iterator(line.begin(), line.end(), mulPattern), sregex_iterator());
+
+        for(auto match : matches)
         {
-            iss >> temp;
-            report.push_back(temp);
+            if(match[0] == "do()")
+                isActive = true;
+            else if(match[0] == "don't()")
+                isActive = false;
+            else if(isActive)
+                res += stoi(match[1]) * stoi(match[2]);
         }
-        report.pop_back();
-
-        auto diff = report | views::pairwise_transform(minus{});
-
-        if(isSafe(diff, checkConstraintsDec) || isSafe(diff, checkConstraintsAsc))
-            res++;
     }
 
     cout << res;
+
     return 0;
 }

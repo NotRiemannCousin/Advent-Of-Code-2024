@@ -2,45 +2,22 @@
 
 using namespace std;
 
-bool checkConstraintsDec(int num)
-{
-    return clamp(num, 1, 3) != num;
-}
-bool checkConstraintsAsc(int num)
-{
-    return checkConstraintsDec(-num);
-}
-
-template<ranges::range R>
-bool isSafe(R data, function<bool(int)> predicate){
-    auto count = ranges::count_if(data, predicate);
-
-    return count == 0;
-}
-
 int main()
 {
     int res{};
-    int temp;
     string line;
+    regex mulPattern(R"(mul\((\d{1,3}),(\d{1,3})\))");
+    smatch results;
 
-    while (getline(cin, line))
+    while(cin >> line)
     {
-        istringstream iss(line);
-        vector<int> report;
-        while (iss)
-        {
-            iss >> temp;
-            report.push_back(temp);
-        }
-        report.pop_back();
+        vector<smatch> matches(sregex_iterator(line.begin(), line.end(), mulPattern), sregex_iterator());
 
-        auto diff = report | views::pairwise_transform(minus{});
-
-        if(isSafe(diff, checkConstraintsDec) || isSafe(diff, checkConstraintsAsc))
-            res++;
+        for(auto match : matches)
+            res += stoi(match[1]) * stoi(match[2]);
     }
 
     cout << res;
+
     return 0;
 }

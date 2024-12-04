@@ -2,13 +2,13 @@
 
 using namespace std;
 
-bool checkConstraintsDec(int num)
+bool checkConstraintsDes(int num)
 {
     return clamp(num, 1, 3) != num;
 }
 bool checkConstraintsAsc(int num)
 {
-    return checkConstraintsDec(-num);
+    return checkConstraintsDes(-num);
 }
 
 template<ranges::range R>
@@ -60,7 +60,7 @@ int main()
 
         auto diff = report | views::pairwise_transform(minus{});
 
-        if(isSafe(diff, checkConstraintsDec) || isSafe(diff, checkConstraintsAsc))
+        if(isSafe(diff, checkConstraintsDes) || isSafe(diff, checkConstraintsAsc))
             res++;
     }
 
