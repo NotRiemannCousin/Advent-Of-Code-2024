@@ -3,7 +3,7 @@
 using namespace std;
 
 
-const string key = "XMAS";
+const string KEY = "XMAS";
 
 int directions[8][2]{
     {+1, +0},
@@ -30,12 +30,12 @@ int main()
 
     function<bool(int, int, int, int, int)> path;
     path = [&](size_t index, int x, int y, int _x, int _y) -> bool{
-        if(index >= key.size())
+        if(index >= KEY.size())
             return true;
         if(x != clamp(x, 0, n - 1) || y != clamp(y, 0, m - 1))
             return false;
         
-        return grid[x][y] == key[index] ? path(index + 1, x + _x, y + _y, _x, _y) : false;
+        return grid[x][y] == KEY[index] ? path(index + 1, x + _x, y + _y, _x, _y) : false;
     };
 
 

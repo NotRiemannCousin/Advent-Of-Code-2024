@@ -32,7 +32,6 @@ int main()
     };
 
 
-
     for(int i{}; i < n; i++)
         for(int j{}; j < n; j++)
         {
