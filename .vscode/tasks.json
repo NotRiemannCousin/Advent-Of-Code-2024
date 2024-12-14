@@ -13,7 +13,8 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-Wall",
                 "-fconcepts",
-                "-fmodules-ts"
+                "-fmodules-ts",
+                "\"-Wl,--stack=268435456\""
             ],
             "options": {
                 "cwd": "C:/msys64/mingw64/bin"
